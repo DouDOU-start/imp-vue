@@ -1,4 +1,5 @@
 import axios, {AxiosInstance, AxiosRequestConfig, AxiosResponse} from "axios";
+import {ElMessage} from "element-plus";
 
 const axiosInstance: AxiosInstance = axios.create({
     baseURL: '/api',
@@ -25,6 +26,9 @@ axiosInstance.interceptors.response.use(
     },
     (error: any) => {
         // 处理响应错误
+        if (500 === error.response.status) {
+            ElMessage.error(`服务器错误，请联系管理员！`)
+        }
         return Promise.reject(error);
     },
 );

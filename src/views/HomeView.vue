@@ -70,7 +70,7 @@ function fileChange() {
   <div>
     <el-container>
       <el-header>Header</el-header>
-      <el-main style="background-color: #f8f8f8; height: 1000px; padding: 20px">
+      <el-main style="background-color: #f8f8f8; height: 1000px; padding: 10px">
 
         <div class="filterCondition">
           机构：
@@ -98,7 +98,7 @@ function fileChange() {
         </el-upload>
 
         <div class="simpleSeriesList">
-          <SimpleSeriesList ref="RefSimpleSeriesList" style="margin: 100px auto;"
+          <SimpleSeriesList ref="RefSimpleSeriesList" style="margin: 100px"
                             :institution-ids="selectInstitution"></SimpleSeriesList>
         </div>
 

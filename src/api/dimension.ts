@@ -1,4 +1,5 @@
-import {ApiResult, GET} from "@/api/api";
+import type {ApiResult} from "@/api/api";
+import {GET} from "@/api/api";
 
 export interface Institution {
     id: number;
