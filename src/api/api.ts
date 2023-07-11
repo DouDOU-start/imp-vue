@@ -2,6 +2,7 @@ import axiosInstance from "@/api/axiosInstance";
 import type {AxiosResponse} from "axios";
 import axios from "axios";
 import {ElMessage} from "element-plus";
+import eventBus from "@/libs/eventBus";
 
 export interface ApiResult<T> {
     code: number;
@@ -14,9 +15,7 @@ export async function GET<T>(url: string, params?: any): Promise<ApiResult<T>> {
     return response.data;
 }
 
-export type ProgressCallback = (progress: number) => void;
-
-export async function DOWNLOAD(url: string, params?: any, progressCallback: ProgressCallback): Promise<AxiosResponse> {
+export async function DOWNLOAD(url: string, params?: any) {
 
     const downloadAxiosInstance= axios.create({
         baseURL: '/api',
@@ -28,10 +27,16 @@ export async function DOWNLOAD(url: string, params?: any, progressCallback: Prog
         url,
         responseType: 'blob',
         onDownloadProgress: (progressEvent) => {
-            const loaded = progressEvent.loaded;
-            const total = progressEvent.total;
-            const progress = Math.round((loaded * 100) / total);
-            progressCallback(progress);
+            const loaded: number = progressEvent.loaded;
+            const total: any = progressEvent.total;
+            const progress: number = Math.round((loaded * 100) / total);
+
+            eventBus.emit('updateTask', [
+                Number(url.substring(url.lastIndexOf("/") + 1)),
+                {
+                    "progress": progress
+                }
+            ])
         },
     })
 
@@ -45,13 +50,14 @@ export async function DOWNLOAD(url: string, params?: any, progressCallback: Prog
         },
     )
 
-    const blob = new Blob([response.data]);
-    const downloadUrl = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = downloadUrl;
-    link.download = response.headers['content-disposition'].split('filename=')[1];
-    link.click();
-    URL.revokeObjectURL(downloadUrl);
+    eventBus.emit('updateTask', [
+        Number(url.substring(url.lastIndexOf("/") + 1)),
+        {
+            "href": URL.createObjectURL(new Blob([response.data])),
+            "download": response.headers['content-disposition'].split('filename=')[1],
+            "progress": 100
+        }
+    ])
 
 }
 

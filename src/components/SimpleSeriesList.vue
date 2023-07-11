@@ -3,6 +3,7 @@
 import {onMounted, ref} from 'vue';
 import {getSimpleSeries} from "@/api/imp";
 import {downLoadSeriesApi} from "@/api/file";
+import eventBus from "@/libs/eventBus";
 
 
 type TData = { institutionIds: []}
@@ -77,16 +78,18 @@ function detail(index: number, row: any) {
   console.log(row.seriesId)
 }
 
-const progress = ref(0)
-
-function callback(bakProgress: number) {
-  progress.value = bakProgress
-  console.log(bakProgress)
-}
-
 async function download(seriesId: number) {
-  console.log(`download: ${seriesId}`)
-  await downLoadSeriesApi(seriesId, callback)
+
+  eventBus.emit('updateTask', [
+    seriesId,
+    {
+      "url": "",
+      "progress": 0
+    }
+  ])
+
+  await downLoadSeriesApi(seriesId)
+
 }
 
 defineExpose({ LoadSimpleSeries })
@@ -94,20 +97,6 @@ defineExpose({ LoadSimpleSeries })
 </script>
 
 <template>
-
-  <form id="dialogForm" class="form-horizontal">
-    <div class="form-group">
-      <label class="control-label">下载进度:
-      </label>
-      <div>
-        <!--进度条-->
-        <div id="progress-body">
-          <progress :value="progress" :max="100"></progress>
-          <div id="progress-bar">{{ progress }}%</div>
-        </div>
-      </div>
-    </div>
-  </form>
 
   <div style="width: 2000px; max-width: 95%; background-color: white; line-height: 40px; margin: 0 auto">
     <el-table stripe class="seriesDataColumn" height="632 px" style="border: none" :data="simpleSeriesData">
@@ -130,5 +119,4 @@ defineExpose({ LoadSimpleSeries })
         :total="totalNum"
     />
   </div>
-
 </template>

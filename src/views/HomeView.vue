@@ -4,8 +4,10 @@ import SimpleSeriesList from "@/components/SimpleSeriesList.vue";
 import {getInstitution} from "@/api/dimension";
 import {nextTick, onMounted, ref} from 'vue';
 import {uploadDicomApi} from "@/api/file";
-import {ElNotification} from "element-plus";
 import type {Institution} from "@/api/dimension";
+import type {TaskItem} from "@/components/TaskList.vue";
+import TaskList from "@/components/TaskList.vue";
+import {ElNotification} from "element-plus";
 
 
 const institution = ref<Array<Institution>>();
@@ -13,6 +15,8 @@ const selectInstitution = ref()
 const upload = ref<any>()
 
 const RefSimpleSeriesList = ref<any>()
+
+const taskMap = ref(new Map<string, TaskItem>())
 
 
 onMounted(() => {
@@ -49,6 +53,7 @@ function uploadDicom(param: any) {
       message: `${param.file.name} 上传成功！`,
       type: 'success',
     })
+
   }).catch(res => {
     console.error(`上传Dicom文件失败，${res}`)
     ElNotification({
@@ -97,6 +102,8 @@ function fileChange() {
           <el-button size="small" type="primary">上传DICOM文件</el-button>
         </el-upload>
 
+        <TaskList class="task-list" :task-map="taskMap"></TaskList>
+
         <div class="simpleSeriesList">
           <SimpleSeriesList ref="RefSimpleSeriesList" style="margin: 100px"
                             :institution-ids="selectInstitution"></SimpleSeriesList>
@@ -107,3 +114,9 @@ function fileChange() {
     </el-container>
   </div>
 </template>
+
+<style lang="less">
+.task-list {
+
+}
+</style>
