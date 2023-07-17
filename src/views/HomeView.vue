@@ -1,41 +1,17 @@
 <script setup lang="ts">
 
 import SimpleSeriesList from "@/components/SimpleSeriesList.vue";
-import {getInstitution} from "@/api/dimension";
-import {nextTick, onMounted, ref} from 'vue';
+import {ref} from 'vue';
 import {uploadDicomApi} from "@/api/file";
-import type {Institution} from "@/api/dimension";
 import type {TaskItem} from "@/components/TaskList.vue";
 import TaskList from "@/components/TaskList.vue";
 import {ElNotification} from "element-plus";
+import FilterCondition from "@/components/FilterCondition.vue";
+import eventBus from "@/libs/eventBus";
 
-
-const institution = ref<Array<Institution>>();
-const selectInstitution = ref()
 const upload = ref<any>()
 
-const RefSimpleSeriesList = ref<any>()
-
 const taskMap = ref(new Map<string, TaskItem>())
-
-
-onMounted(() => {
-  LoadInstitution()
-});
-
-// 加载机构列表
-async function LoadInstitution() {
-  let {data} = await getInstitution();
-  institution.value = data
-}
-
-// 过滤查询
-function filter() {
-  console.log(`机构：${selectInstitution.value}`)
-  nextTick(() => {
-    RefSimpleSeriesList.value.LoadSimpleSeries()
-  })
-}
 
 function onBeforeUploadDicom(file: FileList) {
   console.log(`上传Dicom文件前置，${file}`)
@@ -62,6 +38,8 @@ function uploadDicom(param: any) {
     })
   })
 
+  eventBus.emit('loadSimpleSeries')
+
 }
 
 // 文件发生改变
@@ -74,39 +52,34 @@ function fileChange() {
 <template>
   <div>
     <el-container>
-      <el-header>Header</el-header>
+      <el-header>影像云</el-header>
       <el-main style="background-color: #f8f8f8; height: 1000px; padding: 10px">
+        <el-container>
+          <el-main>
 
-        <div class="filterCondition">
-          机构：
-          <el-select multiple :clearable="true" v-model="selectInstitution" placeholder="全部">
-            <el-option
-                v-for="item in institution"
-                :key="item.id"
-                :label="item.institutionName"
-                :value="item.id"
-            />
-          </el-select>
-        </div>
-        <el-button type="primary" @click="filter">确认</el-button>
+            <FilterCondition />
 
-        <!--        上传DICOM文件-->
-        <el-upload
-            class="upload-dicom"
-            ref="upload"
-            action="string"
-            :before-upload="onBeforeUploadDicom"
-            :http-request="uploadDicom"
-            :on-change="fileChange"
-            multiple>
-          <el-button size="small" type="primary">上传DICOM文件</el-button>
-        </el-upload>
+            <!--        上传DICOM文件-->
+            <el-upload
+                class="upload-dicom"
+                ref="upload"
+                action="string"
+                :before-upload="onBeforeUploadDicom"
+                :http-request="uploadDicom"
+                :on-change="fileChange"
+                multiple>
+              <el-button size="small" type="primary">上传DICOM文件</el-button>
+            </el-upload>
 
-        <TaskList class="task-list" :task-map="taskMap"></TaskList>
+          </el-main>
+          <el-aside width="500px">
+            <TaskList class="task-list" :task-map="taskMap"></TaskList>
+          </el-aside>
 
-        <div class="simpleSeriesList">
-          <SimpleSeriesList ref="RefSimpleSeriesList" style="margin: 100px"
-                            :institution-ids="selectInstitution"></SimpleSeriesList>
+        </el-container>
+
+        <div class="simpleSeriesList" style="width: 100%;">
+          <SimpleSeriesList />
         </div>
 
       </el-main>

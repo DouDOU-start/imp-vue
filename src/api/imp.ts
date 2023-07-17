@@ -5,6 +5,12 @@ export interface GetSimpleSeriesParams {
     currentPage: number;
     pageSize: number;
     institutionIds: any;
+    modality: any;
+    sliceRange: any;
+    bodyPartIds: any;
+    patientSex: any;
+    scanTypeIds: any;
+    organIds: any;
 }
 
 export interface GetSimpleSeries {
