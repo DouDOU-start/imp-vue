@@ -34,7 +34,7 @@ onBeforeUnmount(() => {
         <el-link class="link" v-if="taskMap.get(key)?.href" :href="taskMap.get(key)?.href" :download="taskMap.get(key)?.download">打开</el-link>
       </div>
     </div>
-    <el-empty v-else description="暂无下载任务" :image-size="80" />
+    <el-empty v-else description="暂无下载任务" :image-size="40" />
   </div>
 </template>
 
@@ -42,8 +42,9 @@ onBeforeUnmount(() => {
 .task-list {
 
   width: 400px;
-  height: 250px;
-  border: 2px solid #3763c4;
+  height: 150px;
+  background-color: #fcf3f3;
+  border: 2px solid #fad5d5;
   border-radius: 5px;
   padding: 10px;
   overflow: scroll;
