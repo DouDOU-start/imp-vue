@@ -7,6 +7,9 @@ import eventBus from "@/libs/eventBus";
 
 import type {Ref} from 'vue';
 import type {GetSimpleSeriesParams} from "@/api/imp";
+import {useRouter} from "vue-router";
+
+const router = useRouter()
 
 const seriesColumns = {
   seriesId: {
@@ -157,7 +160,7 @@ function handleSizeChange(val: any) {
 }
 
 function detail(index: number, row: any) {
-  console.log(row.seriesId)
+  router.push(`/seriesDetail/${row.seriesId}`)
 }
 
 async function download(seriesId: number) {
@@ -181,7 +184,7 @@ defineExpose({ loadSimpleSeries })
 <template>
 
   <div style="width: 1910px; max-width: 95%; background-color: white; line-height: 40px; margin: 0 auto">
-    <el-table stripe class="seriesDataColumn" height="632 px" style="border: none; min-height: 650px" :data="simpleSeriesData">
+    <el-table stripe class="seriesDataColumn" style="border: none; max-height: 632px; min-height: 640px; overflow: scroll;" :data="simpleSeriesData">
       <el-table-column type="selection" width="50" />
       <el-table-column align="center" v-for="(seriesColumn, key) in seriesColumns" :key="key" :prop="key" :label="seriesColumn.label" :width="seriesColumn.width"/>
       <el-table-column fixed="right" align="center" :label="operation.title" width="180">
