@@ -1,8 +1,8 @@
 import axiosInstance from "@/api/axiosInstance";
 import type {AxiosResponse} from "axios";
 import axios from "axios";
-import {ElMessage} from "element-plus";
 import eventBus from "@/libs/eventBus";
+import {ElMessage} from "element-plus";
 
 export interface ApiResult<T> {
     code: number;
@@ -15,7 +15,7 @@ export async function GET<T>(url: string, params?: any): Promise<ApiResult<T>> {
     return response.data;
 }
 
-export async function DOWNLOAD(url: string, params?: any) {
+export async function DOWNLOADSERIES(url: string, params?: any) {
 
     const downloadAxiosInstance= axios.create({
         baseURL: '/api',
@@ -58,6 +58,28 @@ export async function DOWNLOAD(url: string, params?: any) {
             "progress": 100
         }
     ])
+
+}
+
+export async function DOWNLOAD(url: string) {
+
+    const downloadAxiosInstance= axios.create({
+        baseURL: '/api',
+        timeout: 30000,
+    });
+
+    const response = await downloadAxiosInstance({
+        method: 'GET',
+        url,
+        responseType: 'blob',
+    })
+
+    const link = document.createElement('a');
+    link.href = window.URL.createObjectURL(new Blob([response.data]));
+    link.setAttribute('download', response.headers['content-disposition'].split('filename=')[1],);
+    document.body.appendChild(link);
+    link.click();
+    link.remove()
 
 }
 

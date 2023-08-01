@@ -70,8 +70,8 @@ function fileChange() {
                 multiple>
               <el-button size="small" type="primary">上传DICOM文件</el-button>
             </el-upload>
-
           </el-main>
+
           <el-aside width="500px">
             <TaskList class="task-list" :task-map="taskMap"></TaskList>
           </el-aside>

@@ -22,20 +22,37 @@ export interface GetSimpleSeries {
 }
 
 export interface GetSeriesDetail {
+    [key: string]: string | number | null,
     seriesNumber: string,
-    seriesUid: number,
-    seriesDescription: number,
+    seriesUid: string,
+    seriesDescription: string,
     modality: string,
     pixelSpacing: string,
     sliceThickness: number,
     row: number,
     columns: number,
-    patientAge: number,
+    instanceNum: number,
+    patientAge: string,
     seriesAt: string,
     institutionName: string,
     patientNumber: string,
     patientName: string,
     patientSex: string
+}
+
+export interface GetSeriesInstance {
+    id: number,
+    instanceNumber: number
+    instanceUid: string
+    sliceLocation: number
+    imageUrl: string
+}
+
+export interface GetSeriesLabel {
+    id: number,
+    fileName: string,
+    fileLocation: string,
+    createdAt: string
 }
 
 export async function getSimpleSeries(params: GetSimpleSeriesParams): Promise<ApiResult<GetSimpleSeries>> {
@@ -44,4 +61,12 @@ export async function getSimpleSeries(params: GetSimpleSeriesParams): Promise<Ap
 
 export async function getSeriesDetail(seriesId: string): Promise<ApiResult<GetSeriesDetail>> {
     return await GET(`/imp/series/${seriesId}`, null);
+}
+
+export async function getSeriesInstance(seriesId: string): Promise<ApiResult<GetSeriesInstance[]>> {
+    return await GET(`/imp/instance/${seriesId}`, null);
+}
+
+export async function getSeriesLabel(seriesId: string): Promise<ApiResult<GetSeriesLabel[]>> {
+    return await GET(`/imp/label/${seriesId}`, null);
 }

@@ -2,15 +2,17 @@
 
 import {onMounted, ref} from "vue";
 import {
-  BodyPart,
   getBodyPart,
   getInstitution,
   getModality, getOrgan,
-  getScanType,
+  getScanType
+} from "@/api/dimension";
+import type {
+  BodyPart,
   Institution,
   Organ,
   ScanType
-} from "@/api/dimension";
+} from '@/api/dimension'
 import eventBus from "@/libs/eventBus";
 
 const institution = ref<Array<Institution>>()
