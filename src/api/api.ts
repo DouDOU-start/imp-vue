@@ -76,7 +76,7 @@ export async function DOWNLOAD(url: string) {
 
     const link = document.createElement('a');
     link.href = window.URL.createObjectURL(new Blob([response.data]));
-    link.setAttribute('download', response.headers['content-disposition'].split('filename=')[1],);
+    link.setAttribute('download', decodeURIComponent(response.headers['content-disposition'].split('filename=')[1],));
     document.body.appendChild(link);
     link.click();
     link.remove()
