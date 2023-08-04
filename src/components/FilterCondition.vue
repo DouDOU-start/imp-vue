@@ -61,19 +61,19 @@ async function LoadModality() {
 // 加载身体检查部位列表
 async function LoadBodyPart() {
   let {data} = await getBodyPart();
-  bodyPart.value = data
+  bodyPart.value = data.records
 }
 
 // 加载扫描类型列表
 async function LoadScanType() {
   let {data} = await getScanType();
-  scanType.value = data
+  scanType.value = data.records
 }
 
 // 加载器官列表
 async function LoadOrgan() {
   let {data} = await getOrgan();
-  organ.value = data
+  organ.value = data.records
 }
 
 // 过滤查询

@@ -1,6 +1,12 @@
 import type {ApiResult} from "@/api/api";
 import {GET} from "@/api/api";
 
+export interface Page<T> {
+    records: T[];
+    total: number;
+}
+
+
 export interface Institution {
     id: number;
     institutionName: string;
@@ -17,7 +23,7 @@ export interface ScanType {
     scanTypeName: string;
 }
 
-export interface Organ {
+export interface OrganItem {
     id: number;
     organName: string;
 }
@@ -30,14 +36,14 @@ export async function getModality(): Promise<ApiResult<Array<string>>> {
     return await GET('/dimension/modality')
 }
 
-export async function getBodyPart(): Promise<ApiResult<Array<BodyPart>>> {
+export async function getBodyPart(): Promise<ApiResult<Page<BodyPart>>> {
     return await GET('/dimension/bodyPart');
 }
 
-export async function getScanType(): Promise<ApiResult<Array<ScanType>>> {
+export async function getScanType(): Promise<ApiResult<Page<ScanType>>> {
     return await GET('/dimension/scanType');
 }
 
-export async function getOrgan(): Promise<ApiResult<Array<Organ>>> {
+export async function getOrgan(): Promise<ApiResult<Page<OrganItem>>> {
     return await GET('/dimension/humanOrgan');
 }
